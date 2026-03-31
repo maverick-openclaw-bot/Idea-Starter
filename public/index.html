@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Idea-Starter — Find Real Pain Points</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a26;
+      --border: #2a2a3a;
+      --text: #e4e4ef;
+      --text2: #8888a0;
+      --accent: #6c5ce7;
+      --accent2: #a29bfe;
+      --green: #00d68f;
+      --green-bg: rgba(0,214,143,0.1);
+      --yellow: #ffc107;
+      --yellow-bg: rgba(255,193,7,0.1);
+      --red: #ff6b6b;
+      --red-bg: rgba(255,107,107,0.1);
+      --orange: #fd9644;
+      --orange-bg: rgba(253,150,68,0.1);
+      --blue: #54a0ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Helvetica, Arial, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh;
+    }
+    a { color: var(--accent2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px; border-bottom: 1px solid var(--border);
+      background: var(--surface); position: sticky; top: 0; z-index: 100;
+    }
+    .logo { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.5px; cursor: pointer; }
+    .logo span { color: var(--accent2); }
+    .nav-right { display: flex; gap: 12px; align-items: center; }
+    .btn {
+      padding: 8px 18px; border-radius: 8px; font-size: 0.875rem; font-weight: 600;
+      cursor: pointer; border: none; transition: all 0.2s;
+    }
+    .btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent2); }
+    .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+
+    /* ── LANDING ── */
+    #landing {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: calc(100vh - 60px); padding: 40px 24px; text-align: center;
+    }
+    #landing h1 {
+      font-size: 3rem; font-weight: 800; letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent), #ff6b6b);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+    }
+    #landing .subtitle { font-size: 1.15rem; color: var(--text2); margin-bottom: 40px; text-align: center; white-space: nowrap; }
+    .search-box {
+      display: flex; gap: 12px; width: 100%; max-width: 600px; margin-bottom: 24px;
+    }
+    .search-box input {
+      flex: 1; padding: 14px 20px; border-radius: 12px;
+      background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+      font-size: 1rem; outline: none; transition: border 0.2s;
+    }
+    .search-box input:focus { border-color: var(--accent); }
+    .search-box input::placeholder { color: var(--text2); }
+    .search-box .btn-primary { padding: 14px 28px; font-size: 1rem; border-radius: 12px; white-space: nowrap; }
+    .source-pills { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 48px; }
+    .source-pill {
+      padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+      background: var(--surface2); border: 1px solid var(--border); color: var(--text2);
+      cursor: default; user-select: none;
+    }
+    .source-pill.active { border-color: var(--accent); color: var(--accent2); background: rgba(108,92,231,0.1); }
+    .how-it-works {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 16px; max-width: 900px; width: 100%; margin-top: 20px;
+    }
+    .step {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 20px; text-align: left;
+    }
+    .step.step-external {
+      background: rgba(255,193,7,0.06); border: 1px dashed rgba(255,193,7,0.3); opacity: 0.85;
+    }
+    .step-num { font-size: 2rem; margin-bottom: 8px; }
+    .step h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .step p { font-size: 0.8rem; color: var(--text2); }
+    .trust-line {
+      margin-top: 40px; font-size: 0.8rem; color: var(--text2);
+      display: flex; align-items: center; gap: 16px; justify-content: center;
+    }
+    @keyframes nudge {
+      0%, 100% { transform: scale(1); }
+      20% { transform: scale(1.12); }
+      40% { transform: scale(1); }
+      60% { transform: scale(1.08); }
+    }
+    .btn-nudge {
+      animation: nudge 0.7s ease;
+      border-color: var(--yellow) !important; color: var(--yellow) !important;
+      box-shadow: 0 0 14px rgba(255,193,7,0.35);
+    }
+    .gh-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600;
+      background: var(--surface2); border: 1px solid var(--border); color: var(--text2);
+      text-decoration: none; transition: all 0.2s;
+    }
+    .gh-btn:hover { border-color: var(--accent); color: var(--text); text-decoration: none; }
+    .gh-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* API Key Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(10,10,15,0.85);
+      z-index: 300; align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 32px; max-width: 480px; width: 90%;
+    }
+    .modal h3 { font-size: 1.2rem; margin-bottom: 16px; }
+    .modal label { font-size: 0.85rem; color: var(--text2); display: block; margin-bottom: 6px; font-weight: 600; }
+    .modal select, .modal input[type="password"] {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+      font-size: 0.9rem; outline: none; margin-bottom: 16px; transition: border 0.2s;
+    }
+    .modal select:focus, .modal input:focus { border-color: var(--accent); }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
+    .modal .hint { font-size: 0.75rem; color: var(--text2); margin-bottom: 16px; line-height: 1.5; }
+    .modal .hint a { color: var(--accent2); }
+    .modal .key-status { font-size: 0.8rem; margin-bottom: 16px; padding: 8px 12px; border-radius: 8px; }
+    .key-saved { background: var(--green-bg); color: var(--green); }
+    .key-none { background: var(--surface2); color: var(--text2); }
+
+    /* ── SCANNING OVERLAY ── */
+    .scanning-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(10,10,15,0.95);
+      z-index: 200; align-items: center; justify-content: center; flex-direction: column;
+    }
+    .scanning-overlay.active { display: flex; }
+    .scan-container { max-width: 580px; width: 90%; text-align: center; }
+    .scan-header { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
+    .scan-dots { display: flex; gap: 4px; }
+    .scan-dots span {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--accent2);
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+    .scan-dots span:nth-child(1) { animation-delay: 0s; }
+    .scan-dots span:nth-child(2) { animation-delay: 0.16s; }
+    .scan-dots span:nth-child(3) { animation-delay: 0.32s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    .scan-status { font-size: 1rem; color: var(--text); font-weight: 600; }
+    .scan-sources { display: flex; gap: 10px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
+    .scan-source {
+      padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600;
+      background: var(--surface); border: 1px solid var(--border); color: var(--text2); transition: all 0.3s;
+    }
+    .scan-source.done { border-color: var(--green); color: var(--green); }
+    .scan-source.active { border-color: var(--accent2); color: var(--accent2); }
+    .scan-source.error { border-color: var(--red); color: var(--red); }
+    .scan-log {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px 20px; text-align: left; max-height: 240px; overflow-y: auto;
+      font-size: 0.8rem; color: var(--text2); line-height: 1.9;
+    }
+    .log-entry { display: flex; align-items: flex-start; gap: 8px; }
+    .log-icon { flex-shrink: 0; width: 14px; text-align: center; }
+    .log-done { color: var(--green); }
+    .log-done .log-icon { color: var(--green); }
+    .log-active .log-icon { color: var(--accent2); }
+    .log-active .log-text { color: var(--text); }
+    .log-error { color: var(--red); }
+    .log-error .log-icon { color: var(--red); }
+    .scan-error {
+      background: var(--red-bg); border: 1px solid rgba(255,107,107,0.3); border-radius: 8px;
+      padding: 12px 16px; margin-top: 16px; color: var(--red); font-size: 0.85rem; text-align: left;
+    }
+
+    /* ── RESULTS PAGE ── */
+    #results { display: none; padding: 32px; max-width: 1000px; margin: 0 auto; }
+    .results-top-bar {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;
+    }
+    .verdict-banner {
+      border-radius: 16px; padding: 32px; margin-bottom: 32px;
+      border: 1px solid;
+    }
+    .verdict-BUILD { border-color: rgba(0,214,143,0.3); background: linear-gradient(135deg, rgba(0,214,143,0.06), rgba(0,214,143,0.02)); }
+    .verdict-RESEARCH { border-color: rgba(255,193,7,0.3); background: linear-gradient(135deg, rgba(255,193,7,0.06), rgba(255,193,7,0.02)); }
+    .verdict-SKIP { border-color: rgba(255,107,107,0.3); background: linear-gradient(135deg, rgba(255,107,107,0.06), rgba(255,107,107,0.02)); }
+    .verdict-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 12px;
+    }
+    .verdict-BUILD .verdict-tag { background: var(--green-bg); color: var(--green); }
+    .verdict-RESEARCH .verdict-tag { background: var(--yellow-bg); color: var(--yellow); }
+    .verdict-SKIP .verdict-tag { background: var(--red-bg); color: var(--red); }
+    .verdict-banner h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+    .verdict-banner .reasoning { color: var(--text2); font-size: 0.95rem; margin-bottom: 16px; }
+    .solution-ideas { display: flex; gap: 8px; flex-wrap: wrap; }
+    .solution-idea { padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; border: 1px solid var(--border); color: var(--text); }
+    .solution-idea-critical { background: var(--red-bg); border-color: rgba(255,107,107,0.3); }
+    .solution-idea-high { background: var(--orange-bg); border-color: rgba(253,150,68,0.3); }
+    .solution-idea-medium { background: var(--yellow-bg); border-color: rgba(255,193,7,0.3); }
+    .solution-idea-low { background: var(--surface2); }
+    .stats-bar {
+      display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 24px;
+      padding: 16px 24px; background: var(--surface); border-radius: 12px; border: 1px solid var(--border);
+    }
+    .stat { text-align: center; }
+    .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--accent2); }
+    .stat-label { font-size: 0.75rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
+    .filters-wrap { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 24px; align-items: flex-end; }
+    .filter-group { display: flex; flex-direction: column; gap: 4px; }
+    .filter-group-label { font-size: 0.75rem; color: var(--text2); font-weight: 600; }
+    .filter-group-hint { font-size: 0.65rem; color: var(--text2); opacity: 0.6; }
+    .filter-select {
+      padding: 7px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 500;
+      background: var(--surface); border: 1px solid var(--border); color: var(--text);
+      cursor: pointer; transition: all 0.15s; outline: none; min-width: 160px;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%238888a0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px;
+    }
+    .filter-select:hover { border-color: var(--accent); }
+    .filter-select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(108,92,231,0.2); }
+    .filter-select option { background: var(--surface); color: var(--text); }
+    .pain-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 24px; margin-bottom: 16px; transition: border-color 0.2s;
+    }
+    .pain-card:hover { border-color: var(--accent); }
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+    .card-title { font-size: 1.1rem; font-weight: 700; flex: 1; }
+    .card-badges { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+    .badge { padding: 3px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+    .badge-critical { background: var(--red-bg); color: var(--red); }
+    .badge-high { background: var(--orange-bg); color: var(--orange); }
+    .badge-medium { background: var(--yellow-bg); color: var(--yellow); }
+    .badge-low { background: var(--surface2); color: var(--text2); }
+    .badge-build { background: var(--green-bg); color: var(--green); }
+    .badge-research { background: var(--yellow-bg); color: var(--yellow); }
+    .badge-skip { background: var(--red-bg); color: var(--red); }
+    .score-ring {
+      width: 48px; height: 48px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; flex-shrink: 0;
+    }
+    .score-high { background: var(--green-bg); color: var(--green); border: 2px solid rgba(0,214,143,0.3); }
+    .score-med { background: var(--yellow-bg); color: var(--yellow); border: 2px solid rgba(255,193,7,0.3); }
+    .score-low { background: var(--red-bg); color: var(--red); border: 2px solid rgba(255,107,107,0.3); }
+    .card-desc { font-size: 0.9rem; color: var(--text2); margin-bottom: 16px; line-height: 1.7; }
+    .card-meta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; font-size: 0.8rem; color: var(--text2); }
+    .card-meta span { display: flex; align-items: center; gap: 4px; }
+    .quotes-section { margin-bottom: 16px; }
+    .quotes-toggle {
+      font-size: 0.8rem; color: var(--accent2); cursor: pointer; background: none;
+      border: none; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 4px;
+    }
+    .quotes-toggle:hover { text-decoration: underline; }
+    .quotes-list { display: none; }
+    .quotes-list.open { display: block; }
+    .quote-item {
+      background: var(--bg); border-left: 3px solid var(--accent); padding: 12px 16px;
+      margin-bottom: 8px; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: var(--text); font-style: italic;
+    }
+    .quote-text { margin-bottom: 4px; }
+    .quote-source { font-style: normal; color: var(--text2); font-size: 0.75rem; }
+    .quote-source a { color: var(--accent2); font-weight: 600; }
+    .wtp-section { margin-bottom: 16px; }
+    .wtp-title { font-size: 0.8rem; font-weight: 700; color: var(--yellow); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .wtp-item {
+      background: rgba(255,193,7,0.05); border: 1px solid rgba(255,193,7,0.15);
+      border-radius: 8px; padding: 10px 14px; margin-bottom: 6px; font-size: 0.85rem;
+    }
+    .wtp-strength { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+    .wtp-strong { background: rgba(0,214,143,0.15); color: var(--green); }
+    .wtp-moderate { background: rgba(255,193,7,0.15); color: var(--yellow); }
+    .wtp-weak { background: rgba(255,107,107,0.15); color: var(--red); }
+    .wtp-source { font-size: 0.75rem; color: var(--text2); margin-top: 4px; }
+    .wtp-source a { color: var(--accent2); font-weight: 600; }
+    .solutions-section { margin-top: 16px; }
+    .solutions-title { font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .solutions-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .solution-tag { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    @media (max-width: 640px) {
+      #landing h1 { font-size: 2rem; }
+      #landing .subtitle { white-space: normal; font-size: 1rem; max-width: 90%; }
+      .search-box { flex-direction: column; }
+      .how-it-works { grid-template-columns: repeat(2, 1fr); }
+      .stats-bar { gap: 16px; }
+      #results { padding: 16px; }
+      nav { padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo" id="logoHome">💡 Idea<span>-Starter</span></div>
+  <div class="nav-right">
+    <button class="btn btn-ghost" id="apiKeyBtn">🔑 AI API Key</button>
+  </div>
+</nav>
+
+<!-- LANDING -->
+<section id="landing">
+  <h1>Find Real Pain Points</h1>
+  <p class="subtitle">Enter a topic → AI scans Reddit, Hacker News & ProductHunt → Get ranked pain points with BUILD / SKIP verdicts</p>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder='e.g. "project management tool"' />
+    <button class="btn btn-primary" id="scanBtn">🔍 Scan Now</button>
+    <button class="btn btn-ghost btn-sm" id="demoBtn" title="See a demo with pre-collected data">▶ See Demo</button>
+  </div>
+  <div class="source-pills">
+    <span class="source-pill active">Reddit</span>
+    <span class="source-pill active">Hacker News</span>
+    <span class="source-pill active">ProductHunt</span>
+  </div>
+  <div class="how-it-works">
+    <div class="step">
+      <div class="step-num">🔎</div>
+      <h3>Scan</h3>
+      <p>AI searches Reddit, Hacker News & ProductHunt for real user complaints and requests</p>
+    </div>
+    <div class="step">
+      <div class="step-num">🧠</div>
+      <h3>Analyze</h3>
+      <p>Classifies pain points, detects willingness-to-pay (WTP) signals, and scores severity</p>
+    </div>
+    <div class="step">
+      <div class="step-num">💡</div>
+      <h3>Verdict</h3>
+      <p>AI delivers a BUILD / SKIP / RESEARCH MORE verdict with solution ideas</p>
+    </div>
+    <div class="step step-external">
+      <div class="step-num">🚀</div>
+      <h3>Build</h3>
+      <p>Take your Idea-Starter validated pain points and start building a product people actually want</p>
+    </div>
+  </div>
+  <p class="trust-line">
+    🔒 Your API key stays in your browser (BYOK).
+    <a class="gh-btn" href="https://github.com/maverick-openclaw-bot/Idea-Starter" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      GitHub
+    </a>
+  </p>
+</section>
+
+<!-- SCANNING OVERLAY -->
+<div class="scanning-overlay" id="scanOverlay">
+  <div class="scan-container">
+    <div class="scan-header">
+      <div class="scan-dots"><span></span><span></span><span></span></div>
+      <div class="scan-status" id="scanStatus">Scanning platforms...</div>
+    </div>
+    <div class="scan-sources" id="scanSources">
+      <span class="scan-source" data-src="reddit">Reddit</span>
+      <span class="scan-source" data-src="hn">Hacker News</span>
+      <span class="scan-source" data-src="ph">ProductHunt</span>
+      <span class="scan-source" data-src="ai">AI Analysis</span>
+    </div>
+    <div class="scan-log" id="scanLog"></div>
+    <div id="scanError"></div>
+  </div>
+</div>
+
+<!-- API KEY MODAL -->
+<div class="modal-overlay" id="apiKeyModal">
+  <div class="modal">
+    <h3>🔑 AI API Key</h3>
+    <div id="keyStatus"></div>
+    <label>Provider</label>
+    <select id="aiProvider">
+      <option value="anthropic">Anthropic (Claude)</option>
+      <option value="openai">OpenAI (GPT)</option>
+      <option value="google">Google (Gemini)</option>
+    </select>
+    <label>API Key</label>
+    <input type="password" id="aiKeyInput" placeholder="sk-ant-api03-..." />
+    <p class="hint">
+      🔒 Your key is stored only in your browser's localStorage — never sent to our servers.<br>
+      📖 Get a key:
+      <a href="https://console.anthropic.com" target="_blank">Anthropic</a> ·
+      <a href="https://platform.openai.com" target="_blank">OpenAI</a> ·
+      <a href="https://aistudio.google.com" target="_blank">Google</a>
+    </p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="clearKeyBtn">Clear Key</button>
+      <button class="btn btn-ghost" id="cancelKeyBtn">Cancel</button>
+      <button class="btn btn-primary" id="saveKeyBtn">Save Key</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<section id="results"></section>
+
+<script>
+// ── ELEMENTS ──
+const landing = document.getElementById('landing');
+const results = document.getElementById('results');
+const scanOverlay = document.getElementById('scanOverlay');
+const searchInput = document.getElementById('searchInput');
+const scanBtn = document.getElementById('scanBtn');
+const apiKeyBtn = document.getElementById('apiKeyBtn');
+const scanLog = document.getElementById('scanLog');
+
+// ── ROTATING PLACEHOLDERS ──
+const PLACEHOLDERS = [
+  'e.g. "project management tool"',
+  'e.g. "fitness tracking app"',
+  'e.g. "AI writing assistant"',
+];
+let phIdx = 0;
+setInterval(() => {
+  phIdx = (phIdx + 1) % PLACEHOLDERS.length;
+  searchInput.placeholder = PLACEHOLDERS[phIdx];
+}, 3000);
+
+// ── STATE ──
+let currentSort = 'score';
+let activeVerdictFilter = 'all';
+let activeSeverityFilter = 'all';
+
+// ── DEMO DATA ──
+const DEMO_DATA = {"painPoints":[{"rank":1,"title":"SaaS Subscription Overload for Small Businesses","severity":"critical","score":91,"verdict":"BUILD","wtpScore":82,"description":"Small business owners are drowning in software subscriptions. A 12-person company reports paying $4,100/mo ($50K/yr) across 23 separate tools — up from $1,200/mo just five years ago. Founders feel trapped: each tool solves one problem but the total cost is unsustainable.","mentionCount":147,"subreddits":["r/Entrepreneur","r/smallbusiness","r/SaaS","r/startups"],"userQuotes":[{"text":"We are paying for 23 separate software subscriptions right now, everything from accounting to project management to CRM to email marketing... the total monthly spend is $4,100 which is almost $50,000 a year for a 12 person company.","sourceName":"r/Entrepreneur","sourceUrl":"https://www.reddit.com/r/Entrepreneur/search?q=SaaS+subscription+overload"},{"text":"Five years ago that number was about $1,200/month. Every single one of these tools has raised prices, some of them multiple times.","sourceName":"r/smallbusiness","sourceUrl":"https://www.reddit.com/r/smallbusiness/search?q=software+subscriptions"},{"text":"I genuinely don't know how small businesses with tight margins are supposed to survive the software tax that keeps going up every year.","sourceName":"r/startups","sourceUrl":"https://www.reddit.com/r/startups/search?q=SaaS+costs"}],"existingSolutions":"Bundled suites (Google Workspace, Zoho One), all-in-one tools (Monday.com, ClickUp), integration platforms (Zapier, Make)","wtpSignals":[{"strength":"strong","quote":"I would mass cancel everything and pay $200/mo for an all-in-one that actually works for a small team.","sourceName":"r/Entrepreneur","sourceUrl":"https://www.reddit.com/r/Entrepreneur/search?q=all+in+one+SaaS"},{"strength":"strong","quote":"About 7% of all 'wish there was an app' requests specifically asked for offline-first or privacy-focused tools. People are getting subscription fatigue.","sourceName":"r/SaaS","sourceUrl":"https://www.reddit.com/r/SaaS/search?q=subscription+fatigue"},{"strength":"moderate","quote":"We switched to Zoho One to save money but the UX is terrible. Would pay more for something that doesn't feel like a 2010 product.","sourceName":"r/smallbusiness","sourceUrl":"https://www.reddit.com/r/smallbusiness/search?q=zoho+one"}],"solutionIdeas":["Curated small-biz software bundle with integrated billing","AI-powered software audit tool that finds redundant subscriptions","Open-source all-in-one for teams under 20 people"]},{"rank":2,"title":"Building Products Nobody Wants (Validation Failure)","severity":"critical","score":88,"verdict":"BUILD","wtpScore":75,"description":"Indie hackers and first-time founders keep building products without talking to customers first. The pattern is universal: spend months coding, launch to crickets, repeat. The root cause is that validation tools are either too expensive or don't exist — so founders default to building blindly.","mentionCount":134,"subreddits":["r/indiehackers","r/SaaS","r/SideProject","r/Entrepreneur"],"userQuotes":[{"text":"I keep seeing posts about people reaching $10K MRR or getting their first 100 users. Instead, let me show you how to build six products and still end up with nothing.","sourceName":"r/indiehackers","sourceUrl":"https://www.reddit.com/r/indiehackers/search?q=built+products+nobody+wants"},{"text":"Spend 6 months building before talking to a single human. You have a vision, so don't let potential customers mess it up with their feedback or needs.","sourceName":"r/SideProject","sourceUrl":"https://www.reddit.com/r/SideProject/search?q=validation+failure"},{"text":"I've built 30+ MVPs for founders. I can tell within 5 minutes of a call whether someone is actually building a business or just hiding from the job market behind a Figma file and a domain name.","sourceName":"r/Entrepreneur","sourceUrl":"https://www.reddit.com/r/Entrepreneur/search?q=MVP+validation"}],"existingSolutions":"GummySearch (shut down Nov 2025), BigIdeasDB ($29/mo), PainRadar (new), Google Trends, manual Reddit browsing","wtpSignals":[{"strength":"strong","quote":"I keep a spreadsheet of every 'why doesn't this exist' post I find online. The word 'overkill' is the strongest buying signal on the internet.","sourceName":"r/SideProject","sourceUrl":"https://www.reddit.com/r/SideProject/search?q=buying+signal"},{"strength":"strong","quote":"I analyzed 9,300+ 'I wish there was an app for this' posts on Reddit. The data on what people actually want is completely counter-intuitive.","sourceName":"r/SaaS","sourceUrl":"https://www.reddit.com/r/SaaS/search?q=wish+there+was+an+app"},{"strength":"moderate","quote":"If someone built a tool that automatically found me validated problems to solve instead of me spending weeks on Reddit, I'd pay in a heartbeat.","sourceName":"r/indiehackers","sourceUrl":"https://www.reddit.com/r/indiehackers/search?q=pain+point+tool"}],"solutionIdeas":["Pain point aggregator with WTP signal detection (← this is Idea Starter!)","Automated customer interview scheduling + analysis tool","Idea validation scorecard with real market data"]},{"rank":3,"title":"SaaS Pricing: Too Low Kills Conversions","severity":"high","score":84,"verdict":"BUILD","wtpScore":85,"description":"Founders consistently underprice their SaaS products and lose customers because of it. Low prices signal low value, attract tire-kickers, and make the product feel disposable. Multiple founders report that raising prices 2-3x with zero product changes led to better conversion and retention.","mentionCount":89,"subreddits":["r/Entrepreneur","r/SaaS","r/indiehackers","r/microsaas"],"userQuotes":[{"text":"My SaaS had zero conversions at $9/mo. I raised to $29 and people started paying. Same product, nothing else changed.","sourceName":"r/Entrepreneur","sourceUrl":"https://www.reddit.com/r/Entrepreneur/search?q=SaaS+pricing"},{"text":"$9 made it look disposable. Nobody took it seriously enough to put it into their workflow.","sourceName":"r/SaaS","sourceUrl":"https://www.reddit.com/r/SaaS/search?q=pricing+too+low"},{"text":"The ones who stuck around at $9 kept asking for features instead of paying. At $29, people treat it like a business tool, not a toy.","sourceName":"r/microsaas","sourceUrl":"https://www.reddit.com/r/microsaas/search?q=raise+prices"}],"existingSolutions":"ProfitWell (pricing analytics), Paddle (billing), Stripe pricing experiments, manual A/B testing","wtpSignals":[{"strength":"strong","quote":"Raised from $9 to $29, same product. Fewer signups but actual paying customers. Revenue went from $0 to covering my costs in 2 months.","sourceName":"r/Entrepreneur","sourceUrl":"https://www.reddit.com/r/Entrepreneur/search?q=raised+price+SaaS"},{"strength":"strong","quote":"My SaaS makes $23K MRR. 284 customers at $81/mo average. Everyone tells me to scale but I work 25 hours a week.","sourceName":"r/SaaS","sourceUrl":"https://www.reddit.com/r/SaaS/search?q=MRR+pricing"},{"strength":"moderate","quote":"I'd pay for a tool that tells me exactly what price point maximizes revenue for my niche. Right now I'm just guessing.","sourceName":"r/microsaas","sourceUrl":"https://www.reddit.com/r/microsaas/search?q=pricing+tool"}],"solutionIdeas":["AI-powered pricing advisor based on competitor and niche analysis","Dynamic pricing A/B testing platform for micro-SaaS","Pricing psychology course + toolkit for indie founders"]},{"rank":4,"title":"Freelancer Platform Trust & Safety Crisis","severity":"high","score":79,"verdict":"RESEARCH MORE","wtpScore":62,"description":"Freelancers on Upwork and Fiverr are getting hit with sophisticated scams — malware disguised as client projects, fake job postings, and payment fraud. Platforms aren't protecting them. The trust infrastructure for freelance work is fundamentally broken.","mentionCount":72,"subreddits":["r/freelance","r/webdev","r/Entrepreneur","r/SideProject"],"userQuotes":[{"text":"First 'client' I get sends me a Next.js project and says 'just run it locally.' They sent malware — deliberately hidden obfuscated JavaScript buried at the bottom of nextjs.config.js.","sourceName":"r/freelance","sourceUrl":"https://www.reddit.com/r/freelance/search?q=scam+malware"},{"text":"Once I de-obfuscated it: full file system access, detecting the user's OS, stealing browser cookies and crypto wallets. 100% intentional.","sourceName":"r/webdev","sourceUrl":"https://www.reddit.com/r/webdev/search?q=freelance+scam"},{"text":"How do I price a client who left me for a larger company? He was one of my first clients. Within a year we dominated his core local area. Then he left for a bigger agency and now he's back.","sourceName":"r/Entrepreneur","sourceUrl":"https://www.reddit.com/r/Entrepreneur/search?q=freelance+client"}],"existingSolutions":"Upwork SafePay, Fiverr Resolution Center, Deel (contracts), virtual machines for testing","wtpSignals":[{"strength":"moderate","quote":"I'd pay $20/mo for a sandbox tool that automatically scans client code for malicious patterns before I run it.","sourceName":"r/freelance","sourceUrl":"https://www.reddit.com/r/freelance/search?q=code+sandbox"},{"strength":"moderate","quote":"Would gladly pay for a verified freelance platform where both sides go through identity verification.","sourceName":"r/webdev","sourceUrl":"https://www.reddit.com/r/webdev/search?q=verified+freelance"},{"strength":"weak","quote":"Someone should build an escrow service specifically for freelance dev work that actually protects the developer, not just the client.","sourceName":"r/freelance","sourceUrl":"https://www.reddit.com/r/freelance/search?q=escrow+service"}],"solutionIdeas":["Code sandbox / malware scanner for freelancers receiving client code","Verified freelance marketplace with mutual identity checks","Smart escrow service with milestone-based payouts"]},{"rank":5,"title":"Finding First Customers Is Harder Than Building","severity":"high","score":82,"verdict":"BUILD","wtpScore":71,"description":"Technical founders can build anything but have zero idea how to find their first 10 paying customers. The gap between 'product exists' and 'product has users' is where most indie projects die.","mentionCount":112,"subreddits":["r/Entrepreneur","r/SaaS","r/indiehackers","r/SideProject"],"userQuotes":[{"text":"I'm a developer with someone willing to invest $5k. What I don't want is to spend 3 months building something clever that nobody needs.","sourceName":"r/Entrepreneur","sourceUrl":"https://www.reddit.com/r/Entrepreneur/search?q=first+customers"},{"text":"They have a landing page but no users. They've been 'refining the product' for 4 months but haven't shown it to a single stranger.","sourceName":"r/indiehackers","sourceUrl":"https://www.reddit.com/r/indiehackers/search?q=finding+customers"},{"text":"I had 17 business ideas in my notes app. Never built any of them. The problem isn't ideas — it's that I have no clue how to get from idea to first dollar.","sourceName":"r/SideProject","sourceUrl":"https://www.reddit.com/r/SideProject/search?q=idea+to+first+dollar"}],"existingSolutions":"YC Startup School (free), Indie Hackers community, Twitter/X building in public, cold outreach tools","wtpSignals":[{"strength":"strong","quote":"If someone built a step-by-step customer acquisition playbook with templates specifically for solo technical founders, I'd buy it today.","sourceName":"r/indiehackers","sourceUrl":"https://www.reddit.com/r/indiehackers/search?q=customer+acquisition"},{"strength":"moderate","quote":"I have a developer + $5k + a goal to build something small but profitable. Would pay for a validated idea + go-to-market plan instead of guessing.","sourceName":"r/Entrepreneur","sourceUrl":"https://www.reddit.com/r/Entrepreneur/search?q=go+to+market"},{"strength":"moderate","quote":"Solo founders are winning faster than ever right now. But most of them figured out distribution before product. Nobody teaches that.","sourceName":"r/indiehackers","sourceUrl":"https://www.reddit.com/r/indiehackers/search?q=distribution+before+product"}],"solutionIdeas":["First-10-customers playbook tool with templates per niche","AI co-founder for go-to-market strategy","Matchmaking platform: founders with products ↔ founders with distribution"]}]};
+
+// ── NAV ──
+scanBtn.addEventListener('click', startScan);
+searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') startScan(); });
+document.getElementById('logoHome').addEventListener('click', goHome);
+document.getElementById('demoBtn').addEventListener('click', () => {
+  showResults('entrepreneur / startup pain points', DEMO_DATA);
+});
+
+function goHome() {
+  results.style.display = 'none';
+  landing.style.display = 'flex';
+  searchInput.value = '';
+  searchInput.focus();
+}
+
+// ── API KEY MODAL ──
+const apiKeyModal = document.getElementById('apiKeyModal');
+const aiProvider = document.getElementById('aiProvider');
+const aiKeyInput = document.getElementById('aiKeyInput');
+const keyStatus = document.getElementById('keyStatus');
+let modalMouseDownTarget = null;
+
+function maskKey(key) {
+  if (key.length <= 10) return '•'.repeat(key.length);
+  return key.slice(0, 5) + '•••••' + key.slice(-5);
+}
+function updateKeyStatus() {
+  const provider = localStorage.getItem('idea-starter-provider');
+  const key = localStorage.getItem('idea-starter-apikey');
+  if (key) {
+    keyStatus.innerHTML = `<div class="key-status key-saved">✅ Key saved: <strong>${provider || 'anthropic'}</strong> — ${maskKey(key)}</div>`;
+    aiProvider.value = provider || 'anthropic';
+    aiKeyInput.value = key;
+  } else {
+    keyStatus.innerHTML = `<div class="key-status key-none">No API key set. Enter your key to enable AI analysis.</div>`;
+    aiKeyInput.value = '';
+  }
+}
+apiKeyBtn.addEventListener('click', () => { updateKeyStatus(); apiKeyModal.classList.add('active'); });
+apiKeyModal.addEventListener('mousedown', e => { modalMouseDownTarget = e.target; });
+apiKeyModal.addEventListener('click', e => {
+  if (e.target === apiKeyModal && modalMouseDownTarget === apiKeyModal) apiKeyModal.classList.remove('active');
+  modalMouseDownTarget = null;
+});
+document.getElementById('cancelKeyBtn').addEventListener('click', () => apiKeyModal.classList.remove('active'));
+document.getElementById('saveKeyBtn').addEventListener('click', () => {
+  const key = aiKeyInput.value.trim();
+  if (!key) { aiKeyInput.focus(); return; }
+  localStorage.setItem('idea-starter-provider', aiProvider.value);
+  localStorage.setItem('idea-starter-apikey', key);
+  updateKeyStatus();
+  apiKeyModal.classList.remove('active');
+});
+document.getElementById('clearKeyBtn').addEventListener('click', () => {
+  localStorage.removeItem('idea-starter-provider');
+  localStorage.removeItem('idea-starter-apikey');
+  aiKeyInput.value = '';
+  updateKeyStatus();
+});
+
+// ── SCAN LOG HELPERS ──
+function addLog(text, status = 'active') {
+  const icon = status === 'done' ? '✓' : status === 'error' ? '✗' : '⟳';
+  const entry = document.createElement('div');
+  entry.className = `log-entry log-${status}`;
+  entry.id = 'log-' + Date.now() + Math.random();
+  entry.innerHTML = `<span class="log-icon">${icon}</span><span class="log-text">${text}</span>`;
+  scanLog.appendChild(entry);
+  scanLog.scrollTop = scanLog.scrollHeight;
+  return entry.id;
+}
+function finishLog(id, text, status = 'done') {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const icon = status === 'done' ? '✓' : status === 'error' ? '✗' : '⟳';
+  el.className = `log-entry log-${status}`;
+  el.innerHTML = `<span class="log-icon">${icon}</span><span class="log-text">${text}</span>`;
+  scanLog.scrollTop = scanLog.scrollHeight;
+}
+
+// ── FETCH REDDIT (via CORS proxy) ──
+async function fetchReddit(query) {
+  // Try multiple approaches for Reddit
+  const proxyUrls = [
+    `https://corsproxy.io/?url=${encodeURIComponent(`https://www.reddit.com/search.json?q=${encodeURIComponent(query)}&sort=relevance&t=year&limit=30`)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://www.reddit.com/search.json?q=${encodeURIComponent(query)}&sort=relevance&t=year&limit=30`)}`,
+  ];
+
+  for (const url of proxyUrls) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (!data?.data?.children) continue;
+      return data.data.children
+        .filter(c => c.kind === 't3')
+        .map(c => ({
+          source: 'Reddit',
+          subreddit: c.data.subreddit_name_prefixed || `r/${c.data.subreddit}`,
+          title: c.data.title || '',
+          selftext: (c.data.selftext || '').slice(0, 500),
+          url: `https://www.reddit.com${c.data.permalink}`,
+          score: c.data.score || 0,
+          comments: c.data.num_comments || 0,
+          date: c.data.created_utc ? new Date(c.data.created_utc * 1000).toISOString() : '',
+        }));
+    } catch (e) {
+      continue;
+    }
+  }
+  return null; // all proxies failed
+}
+
+// ── FETCH HACKER NEWS ──
+async function fetchHN(query) {
+  const url = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(query)}&tags=story&hitsPerPage=30`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HN API ${res.status}`);
+  const data = await res.json();
+  return data.hits.map(h => ({
+    source: 'Hacker News',
+    title: h.title || '',
+    url: h.url || `https://news.ycombinator.com/item?id=${h.objectID}`,
+    hnUrl: `https://news.ycombinator.com/item?id=${h.objectID}`,
+    points: h.points || 0,
+    comments: h.num_comments || 0,
+    date: h.created_at,
+  }));
+}
+
+// ── FETCH PRODUCTHUNT (via CORS proxy) ──
+async function fetchProductHunt(query) {
+  const proxyUrls = [
+    `https://corsproxy.io/?url=${encodeURIComponent(`https://www.producthunt.com/search/posts?q=${encodeURIComponent(query)}`)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://www.producthunt.com/search/posts?q=${encodeURIComponent(query)}`)}`,
+  ];
+  for (const url of proxyUrls) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+      if (!res.ok) continue;
+      const text = await res.text();
+      // Try to extract product titles and taglines from the HTML
+      const titleMatches = [...text.matchAll(/<h3[^>]*>([^<]+)<\/h3>/gi)].map(m => m[1]).slice(0, 20);
+      const taglineMatches = [...text.matchAll(/<p[^>]*class="[^"]*tagline[^"]*"[^>]*>([^<]+)<\/p>/gi)].map(m => m[1]);
+      if (titleMatches.length === 0) return null;
+      return titleMatches.map((title, i) => ({
+        source: 'ProductHunt',
+        title: title.trim(),
+        tagline: taglineMatches[i]?.trim() || '',
+        url: `https://www.producthunt.com/search?q=${encodeURIComponent(query)}`,
+      }));
+    } catch (e) { continue; }
+  }
+  return null;
+}
+
+// ── CALL AI PROVIDERS ──
+function buildPrompts(query, redditPosts, hnPosts, phPosts) {
+  let communityData = '';
+  if (redditPosts && redditPosts.length > 0) {
+    communityData += 'REAL REDDIT POSTS:\n';
+    communityData += redditPosts.slice(0, 15).map((p, i) =>
+      `${i+1}. [${p.subreddit}, ${p.score} upvotes, ${p.comments} comments] "${p.title}"\n   ${p.selftext ? p.selftext.slice(0, 200) + '...' : ''}\n   URL: ${p.url}`
+    ).join('\n');
+    communityData += '\n\n';
+  }
+  if (hnPosts && hnPosts.length > 0) {
+    communityData += 'REAL HACKER NEWS POSTS:\n';
+    communityData += hnPosts.slice(0, 15).map((p, i) =>
+      `${i+1}. [HN ${p.points} pts, ${p.comments} comments] "${p.title}"\n   Discussion: ${p.hnUrl}`
+    ).join('\n');
+  }
+  if (phPosts && phPosts.length > 0) {
+    communityData += '\n\nREAL PRODUCTHUNT POSTS:\n';
+    communityData += phPosts.slice(0, 15).map((p, i) =>
+      `${i+1}. "${p.title}"${p.tagline ? ' — ' + p.tagline : ''}\n   URL: ${p.url}`
+    ).join('\n');
+  }
+
+  const systemPrompt = `You are a pain point analysis AI for Idea-Starter. Given a topic and REAL community data from Reddit, Hacker News, and ProductHunt, identify the top 5 user pain points.
+
+CRITICAL RULES FOR QUOTES — VIOLATIONS WILL BREAK THE PRODUCT:
+1. For each quote, you MUST include "sourceUrl" (real post URL or search URL) and "sourceName" (e.g. "r/gaming" or "Hacker News").
+2. **ABSOLUTE RULE — wtpSignals and userQuotes MUST use COMPLETELY DIFFERENT quotes from DIFFERENT posts and DIFFERENT users.**
+   - A wtpSignal quote must NEVER appear as a userQuote (not even paraphrased).
+   - A wtpSignal sourceUrl must NEVER match any userQuote sourceUrl within the same pain point.
+   - Think of wtpSignals as "people expressing willingness to pay or switch" and userQuotes as "people describing the frustration itself" — these are fundamentally different sentiments from different people.
+3. Each userQuote within a pain point must come from a DIFFERENT post/thread and a DIFFERENT user — show breadth of the pain across multiple people. Do NOT repeat the same person's quote.
+4. If you don't have enough distinct real sources, use different subreddit search URLs (e.g. reddit.com/r/gaming/search?q=..., reddit.com/r/gamedev/search?q=...) to show variety.
+5. Every pain point MUST have at least 2 solutionIdeas. Never return an empty solutionIdeas array.
+
+Output ONLY valid JSON matching this schema:
+{
+  "painPoints": [
+    {
+      "rank": 1,
+      "title": "Short descriptive title",
+      "severity": "critical" | "high" | "medium" | "low",
+      "score": 0-100,
+      "verdict": "BUILD" | "SKIP" | "RESEARCH MORE",
+      "wtpScore": 0-100,
+      "description": "2-3 sentences with specifics",
+      "mentionCount": number,
+      "subreddits": ["r/relevant"],
+      "userQuotes": [
+        { "text": "The actual quote text", "sourceName": "r/gaming", "sourceUrl": "https://reddit.com/r/..." }
+      ],
+      "existingSolutions": "Comma-separated list",
+      "wtpSignals": [
+        { "strength": "strong"|"moderate"|"weak", "quote": "Quote text", "sourceName": "r/subreddit or Hacker News", "sourceUrl": "https://..." }
+      ],
+      "solutionIdeas": ["Idea 1", "Idea 2", "Idea 3"]
+    }
+  ]
+}
+
+Rules:
+- Rank by pain intensity (score). Top = most painful.
+- NEVER duplicate quotes: wtpSignals and userQuotes must have ZERO overlapping text or URLs. Each userQuote must be from a DIFFERENT person/thread.
+- Use real Reddit/HN/ProductHunt URLs from the provided data. If no direct match, use subreddit search URLs like https://www.reddit.com/r/gaming/search?q=...
+- Be specific. Generic pain points = useless.
+- Mix BUILD and RESEARCH MORE verdicts realistically.
+- Every pain point MUST include at least 2 solutionIdeas — never leave this array empty.`;
+
+  const userPrompt = `Topic: "${query}"
+
+${communityData || '(No community data available — use your knowledge of Reddit, Hacker News, and ProductHunt discussions about this topic)'}
+
+Analyze the top 5 pain points for "${query}" across these communities. Focus on genuine user frustrations, unmet needs, and willingness-to-pay signals. Include real source URLs for every quote.`;
+
+  return { systemPrompt, userPrompt };
+}
+
+async function callAI(systemPrompt, userPrompt) {
+  const provider = localStorage.getItem('idea-starter-provider') || 'anthropic';
+  const apiKey = localStorage.getItem('idea-starter-apikey');
+  if (provider === 'anthropic') return callAnthropic(apiKey, systemPrompt, userPrompt);
+  if (provider === 'openai') return callOpenAI(apiKey, systemPrompt, userPrompt);
+  if (provider === 'google') return callGoogle(apiKey, systemPrompt, userPrompt);
+}
+
+async function callAnthropic(apiKey, sys, usr) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json', 'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true',
+    },
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 4096, system: sys, messages: [{ role: 'user', content: usr }] }),
+  });
+  if (!res.ok) throw new Error(`Anthropic API ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  const data = await res.json();
+  return JSON.parse(data.content[0].text);
+}
+
+async function callOpenAI(apiKey, sys, usr) {
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'authorization': `Bearer ${apiKey}` },
+    body: JSON.stringify({ model: 'gpt-4o', response_format: { type: 'json_object' }, messages: [{ role: 'system', content: sys }, { role: 'user', content: usr }] }),
+  });
+  if (!res.ok) throw new Error(`OpenAI API ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  const data = await res.json();
+  return JSON.parse(data.choices[0].message.content);
+}
+
+async function callGoogle(apiKey, sys, usr) {
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ systemInstruction: { parts: [{ text: sys }] }, contents: [{ parts: [{ text: usr }] }], generationConfig: { responseMimeType: 'application/json' } }),
+  });
+  if (!res.ok) throw new Error(`Google API ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  const data = await res.json();
+  return JSON.parse(data.candidates[0].content.parts[0].text);
+}
+
+// ── MAIN SCAN FLOW ──
+async function startScan() {
+  if (!localStorage.getItem('idea-starter-apikey')) {
+    apiKeyBtn.classList.add('btn-nudge');
+    setTimeout(() => apiKeyBtn.classList.remove('btn-nudge'), 1500);
+    return;
+  }
+  const query = searchInput.value.trim();
+  if (!query) { searchInput.focus(); return; }
+
+  // Reset overlay
+  scanOverlay.classList.add('active');
+  scanLog.innerHTML = '';
+  document.getElementById('scanError').innerHTML = '';
+  scanOverlay.querySelectorAll('.scan-source').forEach(s => s.className = 'scan-source');
+  document.getElementById('scanStatus').textContent = 'Fetching community data...';
+
+  let redditPosts = null;
+  let hnPosts = [];
+  let phPosts = null;
+
+  // Step 1: Fetch Reddit
+  const srcReddit = scanOverlay.querySelector('[data-src="reddit"]');
+  srcReddit.classList.add('active');
+  const logReddit = addLog(`Searching Reddit for "${query}"...`);
+  try {
+    redditPosts = await fetchReddit(query);
+    if (redditPosts) {
+      finishLog(logReddit, `Reddit: fetched ${redditPosts.length} posts from ${[...new Set(redditPosts.map(p => p.subreddit))].slice(0, 4).join(', ')}`, 'done');
+      srcReddit.classList.remove('active');
+      srcReddit.classList.add('done');
+    } else {
+      finishLog(logReddit, 'Reddit: CORS blocked — AI will use knowledge of Reddit discussions instead', 'error');
+      srcReddit.classList.remove('active');
+      srcReddit.classList.add('error');
+    }
+  } catch (e) {
+    finishLog(logReddit, `Reddit: ${e.message} — AI will supplement`, 'error');
+    srcReddit.classList.remove('active');
+    srcReddit.classList.add('error');
+  }
+
+  // Step 2: Fetch HN
+  const srcHN = scanOverlay.querySelector('[data-src="hn"]');
+  srcHN.classList.add('active');
+  const logHN = addLog(`Searching Hacker News for "${query}"...`);
+  try {
+    hnPosts = await fetchHN(query);
+    finishLog(logHN, `Hacker News: fetched ${hnPosts.length} posts (top: ${hnPosts[0]?.title?.slice(0, 50) || 'none'}...)`, 'done');
+    srcHN.classList.remove('active');
+    srcHN.classList.add('done');
+  } catch (e) {
+    finishLog(logHN, `Hacker News: ${e.message}`, 'error');
+    srcHN.classList.remove('active');
+    srcHN.classList.add('error');
+  }
+
+  // Step 2.5: Fetch ProductHunt
+  const srcPH = scanOverlay.querySelector('[data-src="ph"]');
+  srcPH.classList.add('active');
+  const logPH = addLog(`Searching ProductHunt for "${query}"...`);
+  try {
+    phPosts = await fetchProductHunt(query);
+    if (phPosts) {
+      finishLog(logPH, `ProductHunt: fetched ${phPosts.length} products related to "${query}"`, 'done');
+      srcPH.classList.remove('active');
+      srcPH.classList.add('done');
+    } else {
+      finishLog(logPH, 'ProductHunt: CORS blocked — AI will use knowledge of ProductHunt instead', 'error');
+      srcPH.classList.remove('active');
+      srcPH.classList.add('error');
+    }
+  } catch (e) {
+    finishLog(logPH, `ProductHunt: ${e.message} — AI will supplement`, 'error');
+    srcPH.classList.remove('active');
+    srcPH.classList.add('error');
+  }
+
+  // Step 3: AI Analysis
+  const srcAI = scanOverlay.querySelector('[data-src="ai"]');
+  srcAI.classList.add('active');
+  document.getElementById('scanStatus').textContent = 'AI analyzing pain points...';
+
+  const totalPosts = (redditPosts ? redditPosts.length : 0) + hnPosts.length + (phPosts ? phPosts.length : 0);
+  const provider = localStorage.getItem('idea-starter-provider') || 'anthropic';
+  const logAI = addLog(`Sending ${totalPosts} posts to ${provider} for pain point analysis...`);
+
+  try {
+    const { systemPrompt, userPrompt } = buildPrompts(query, redditPosts, hnPosts, phPosts);
+    const aiResult = await callAI(systemPrompt, userPrompt);
+
+    finishLog(logAI, `${provider}: analyzed ${totalPosts} posts → ${aiResult.painPoints.length} pain points identified`, 'done');
+    srcAI.classList.remove('active');
+    srcAI.classList.add('done');
+
+    document.getElementById('scanStatus').textContent = 'Done!';
+    await sleep(300);
+    scanOverlay.classList.remove('active');
+    showResults(query, aiResult);
+  } catch (e) {
+    finishLog(logAI, `AI analysis failed: ${e.message}`, 'error');
+    srcAI.classList.remove('active');
+    srcAI.classList.add('error');
+    document.getElementById('scanStatus').textContent = 'Analysis failed';
+    document.getElementById('scanError').innerHTML = `
+      <div class="scan-error">
+        <strong>Error:</strong> ${e.message}<br>
+        <button class="btn btn-ghost" style="margin-top:10px;" onclick="scanOverlay.classList.remove('active')">Close</button>
+      </div>`;
+  }
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ── RENDER RESULTS ──
+function showResults(query, data) {
+  landing.style.display = 'none';
+  results.style.display = 'block';
+  activeVerdictFilter = 'all';
+  activeSeverityFilter = 'all';
+  currentSort = 'score';
+
+  const pp = data.painPoints;
+  const totalMentions = pp.reduce((s, p) => s + (p.mentionCount || 0), 0);
+  const wtpCount = pp.reduce((s, p) => s + (p.wtpSignals ? p.wtpSignals.length : 0), 0);
+  const buildCount = pp.filter(p => p.verdict === 'BUILD').length;
+  const avgScore = Math.round(pp.reduce((s, p) => s + (p.score || 0), 0) / pp.length);
+  const topVerdict = buildCount >= pp.length / 2 ? 'BUILD' : buildCount > 0 ? 'RESEARCH' : 'SKIP';
+  const verdictEmoji = topVerdict === 'BUILD' ? '🟢' : topVerdict === 'RESEARCH' ? '🟡' : '🔴';
+
+  results.innerHTML = `
+    <div class="results-top-bar">
+      <button class="btn btn-ghost btn-sm" id="newSearchBtn">← New Search</button>
+      <span style="font-size:0.85rem; color:var(--text2);">Results for "<strong style="color:var(--text)">${query}</strong>"</span>
+    </div>
+    <div class="verdict-banner verdict-${topVerdict}">
+      <div class="verdict-tag">${verdictEmoji} ${topVerdict === 'RESEARCH' ? 'RESEARCH MORE' : topVerdict}</div>
+      <h2>"${query}" — Pain Score: ${avgScore}/100</h2>
+      <p class="reasoning">Analyzed across Reddit, Hacker News & ProductHunt. ${wtpCount} willingness-to-pay signals detected. ${buildCount}/${pp.length} pain points rated BUILD-worthy.</p>
+      <div class="solution-ideas">
+        ${pp.map(p => {
+          const ideas = p.solutionIdeas || [];
+          const idea = ideas[0] || p.title;
+          return `<span class="solution-idea solution-idea-${p.severity || 'medium'}">💡 ${idea}</span>`;
+        }).join('')}
+      </div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-value">${pp.length}</div><div class="stat-label">Pain Points</div></div>
+      <div class="stat"><div class="stat-value">${totalMentions}</div><div class="stat-label">Mentions</div></div>
+      <div class="stat"><div class="stat-value">${wtpCount}</div><div class="stat-label">WTP Signals</div></div>
+      <div class="stat"><div class="stat-value">${buildCount}</div><div class="stat-label">BUILD Worthy</div></div>
+      <div class="stat"><div class="stat-value">3</div><div class="stat-label">Platforms</div></div>
+    </div>
+    <div class="filters-wrap">
+      <div class="filter-group">
+        <span class="filter-group-label">Verdict</span>
+        <span class="filter-group-hint">AI recommendation</span>
+        <select class="filter-select" id="verdictSelect">
+          <option value="all">All Verdicts</option>
+          <option value="BUILD">🟢 BUILD</option>
+          <option value="RESEARCH MORE">🟡 RESEARCH MORE</option>
+          <option value="SKIP">🔴 SKIP</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-group-label">Severity</span>
+        <span class="filter-group-hint">Pain intensity level</span>
+        <select class="filter-select" id="severitySelect">
+          <option value="all">All Severities</option>
+          <option value="critical">🔴 Critical</option>
+          <option value="high">🟠 High</option>
+          <option value="medium">🟡 Medium</option>
+        </select>
+      </div>
+      <div class="filter-group" style="margin-left:auto;">
+        <span class="filter-group-label">Sort by</span>
+        <span class="filter-group-hint">Ranking order</span>
+        <select class="filter-select" id="sortSelect">
+          <option value="score">🔥 Pain Score</option>
+          <option value="wtpScore">💰 WTP</option>
+          <option value="mentionCount">💬 Mentions</option>
+        </select>
+      </div>
+    </div>
+    <div id="cardsContainer"></div>
+  `;
+
+  document.getElementById('newSearchBtn').addEventListener('click', goHome);
+  renderCards(pp);
+  bindFilterEvents(pp);
+}
+
+function renderQuote(q) {
+  // Handle both string quotes (old format) and object quotes (new format with sourceUrl)
+  if (typeof q === 'string') {
+    return `<div class="quote-item"><div class="quote-text">"${q}"</div></div>`;
+  }
+  const link = q.sourceUrl
+    ? `<a href="${q.sourceUrl}" target="_blank" rel="noopener">${q.sourceName || 'Source'} ↗</a>`
+    : `<span>${q.sourceName || ''}</span>`;
+  return `<div class="quote-item">
+    <div class="quote-text">"${q.text}"</div>
+    <div class="quote-source">— ${link}</div>
+  </div>`;
+}
+
+function renderWTP(w) {
+  const link = w.sourceUrl
+    ? `<a href="${w.sourceUrl}" target="_blank" rel="noopener">${w.sourceName || w.source || 'Source'} ↗</a>`
+    : `<span>${w.sourceName || w.source || ''}</span>`;
+  return `<div class="wtp-item">
+    <span class="wtp-strength wtp-${w.strength}">${w.strength}</span>
+    "${w.quote}"
+    <div class="wtp-source">— ${link}</div>
+  </div>`;
+}
+
+function renderCards(painPoints) {
+  let filtered = [...painPoints];
+  if (activeVerdictFilter !== 'all') filtered = filtered.filter(p => p.verdict === activeVerdictFilter);
+  if (activeSeverityFilter !== 'all') filtered = filtered.filter(p => p.severity === activeSeverityFilter);
+  filtered.sort((a, b) => (b[currentSort] || 0) - (a[currentSort] || 0));
+
+  const container = document.getElementById('cardsContainer');
+  if (!container) return;
+  container.innerHTML = filtered.map(p => {
+    const quotes = p.userQuotes || [];
+    const wtps = p.wtpSignals || [];
+    return `
+    <div class="pain-card">
+      <div class="card-header">
+        <div>
+          <div class="card-badges" style="margin-bottom:8px;">
+            <span class="badge badge-${p.severity || 'medium'}">${p.severity || 'medium'}</span>
+            <span class="badge badge-${p.verdict === 'BUILD' ? 'build' : p.verdict === 'SKIP' ? 'skip' : 'research'}">${p.verdict}</span>
+          </div>
+          <div class="card-title">${p.title}</div>
+        </div>
+        <div class="score-ring ${(p.score||0) >= 85 ? 'score-high' : (p.score||0) >= 70 ? 'score-med' : 'score-low'}">${p.score || 0}</div>
+      </div>
+      <p class="card-desc">${p.description || ''}</p>
+      <div class="card-meta">
+        <span>💬 ${p.mentionCount || 0} mentions</span>
+        <span>💰 WTP: ${p.wtpScore || 0}/100</span>
+        <span>📋 ${p.existingSolutions || 'None identified'}</span>
+      </div>
+      ${wtps.length ? `
+        <div class="wtp-section">
+          <div class="wtp-title">💰 Willingness-to-Pay Signals (${wtps.length})</div>
+          ${wtps.map(renderWTP).join('')}
+        </div>` : ''}
+      ${quotes.length ? `
+        <div class="quotes-section">
+          <button class="quotes-toggle" onclick="toggleQuotes(this, ${quotes.length})">▸ Show ${quotes.length} user quotes</button>
+          <div class="quotes-list">${quotes.map(renderQuote).join('')}</div>
+        </div>` : ''}
+      ${(p.solutionIdeas?.length) ? `
+        <div class="solutions-section">
+          <div class="solutions-title">🚀 Possible Solutions (${p.solutionIdeas.length})</div>
+          <div class="solutions-row">${p.solutionIdeas.map(s => `<span class="solution-tag">💡 ${s}</span>`).join('')}</div>
+        </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function toggleQuotes(btn, count) {
+  const list = btn.nextElementSibling;
+  list.classList.toggle('open');
+  btn.textContent = list.classList.contains('open') ? '▾ Hide user quotes' : `▸ Show ${count} user quotes`;
+}
+
+function bindFilterEvents(painPoints) {
+  const verdictSelect = document.getElementById('verdictSelect');
+  const severitySelect = document.getElementById('severitySelect');
+  const sortSelect = document.getElementById('sortSelect');
+  if (verdictSelect) verdictSelect.addEventListener('change', () => {
+    activeVerdictFilter = verdictSelect.value;
+    renderCards(painPoints);
+  });
+  if (severitySelect) severitySelect.addEventListener('change', () => {
+    activeSeverityFilter = severitySelect.value;
+    renderCards(painPoints);
+  });
+  if (sortSelect) sortSelect.addEventListener('change', () => {
+    currentSort = sortSelect.value;
+    renderCards(painPoints);
+  });
+}
+</script>
+</body>
+</html>
